@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site site="http://www.beta.foxsoccer.tv/page/CatchUpVideo/"
+		plugin="http://www.beta.foxsoccer.tv/flash/unifiedplayer/UnifiedPlayer.swf"
+		initialState="playing"
+		identifier="com.plexapp.plugins.foxsoccer"
+		version="1.0">
+		
+	<crop x="0" y="0" width="960" height="540" />
+	
+	<!-- PLAYING -->
+	<state name="playing">
+		<event>
+			<condition>
+				<command name="pause" />
+			</condition>
+			<action>
+                <move x="110" y="480" />
+                <pause time="100" />
+				<click x="110" y="480" />
+				<goto state="paused" />
+			</action>
+		</event>
+    
+    </state>
+    
+	<!-- PAUSED -->
+	<state name="paused">
+		<event>
+			<condition>
+				<command name="play" />
+			</condition>
+			<action>
+                <move x="110" y="480" />
+                <pause time="100" />
+				<click x="110" y="480" />
+				<goto state="playing" />
+			</action>
+		</event> 
+	</state>
+</site>

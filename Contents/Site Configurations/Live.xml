@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site site="http://www.beta.foxsoccer.tv/page/sub/WatchLiveEvent/"
+		plugin="http://www.beta.foxsoccer.tv/flash/unifiedplayer/UnifiedPlayer.swf"
+		initialState="wait-for-frame-load"
+		identifier="com.plexapp.plugins.foxsoccer"
+		version="1.0">
+		
+	<crop x="0" y="0" width="643" height="364" />
+	
+	<!-- PLAYING -->
+	<state name="playing">
+		<event>
+			<condition>
+				<command name="pause" />
+			</condition>
+			<action>
+                <move x="110" y="300" />
+                <pause time="100" />
+				<click x="110" y="300" />
+				<goto state="paused" />
+			</action>
+		</event>
+    
+    </state>
+    
+	<!-- PAUSED -->
+	<state name="paused">
+		<event>
+			<condition>
+				<command name="play" />
+			</condition>
+			<action>
+                <move x="110" y="300" />
+                <pause time="100" />
+				<click x="110" y="300" />
+				<goto state="playing" />
+			</action>
+		</event> 
+	</state>
+	
+	<state name="golive">
+		<event>
+			<condition>
+				<command name="play" />
+			</condition>
+			<action>
+                <move x="180" y="305" />
+                <pause time="100" />
+				<click x="180" y="305" />
+				<goto state="playing" />
+			</action>
+		</event> 
+	</state>
+	
+	<condition name="need-to-login">
+		<and>
+			<javascript script="check = IsLoggedIn() ? 1 : 0" matches="0" />
+		</and>
+	</condition>
+	
+	<state name="wait-for-frame-load">
+		<event>
+			<condition>
+				<frameLoaded />
+			</condition>
+			<action>
+				<goto state="check-for-auth" />
+			</action>
+		</event>
+	</state>
+	
+	<state name="check-for-auth">
+		<event>
+			<condition>
+				<not>
+					<condition name="need-to-login" />
+				</not>
+			</condition>
+			<action>
+				<goto state="playing" />
+			</action>
+		</event>
+		<event>
+			<condition>
+				<condition name="need-to-login" />
+			</condition>
+			<action>
+				<run script="$('#userName_hdr').get(0).value = '${login}' ;$('#password_hdr').get(0).value = '${password}' ;$('#loginForm_hdr').submit();" />
+				<pause time="5000" />
+				<visit url="http://www.beta.foxsoccer.tv/page/Home/" />
+				<goto state="check-for-auth-again" />
+			</action>
+		</event>
+	</state>
+	
+	<state name="check-for-auth-again">
+		<event>
+			<condition>
+				<javascript script="check = IsLoggedIn() ? 1 : 0" matches="0" />
+			</condition>
+			<action>
+				<goto state="end" param="Please check your username and password in the plugin's settings" />
+			</action>
+		</event>
+		<event>
+			<condition>
+				<not>
+					<javascript script="check = IsLoggedIn() ? 1 : 0" matches="0" />
+				</not>
+			</condition>
+			<action>
+				<visit url="${url}" />
+				<goto state="playing" />
+			</action>
+		</event>
+	</state>
+
+	
+	
+</site>
